@@ -227,7 +227,11 @@
     <div id="bg2">
         <input type="button" value="START" id="btn-start"> <br>
         目前分數:<span id="test-Score"></span> <br>
-        剩餘時間:<span id="text-time"></span>
+        剩餘時間:<span id="text-time"></span> <br>
+        <hr>
+        最高分: <br>
+        玩家: <span id="text-highplayer"></span> <br>
+        分數: <span id="text-highscore">0</span>
     </div>
 
 
@@ -259,9 +263,24 @@
         const textScore = document.getElementById("test-Score");
         const textTime = document.getElementById("text-time");
         const holes = document.getElementsByClassName("hole");
+        const textHighplayer = document.getElementById("text-highplayer");
+        const textHighscore = document.getElementById("text-highscore");
+
         let timer = 0;
         let score = 0;
         let timeleft = 5;
+        let highscore = { name: '', score: '' };
+        let storage = JSON.parse(localStorage.getItem("highscore"));
+        if (storage !== null) {
+            highscore.name = storage.name;
+            textHighplayer.innerText = highscore.name;
+            highscore.score = storage.score;
+            textHighscore.innerText = highscore.score;
+        }
+
+
+
+
 
         btnStart.onclick = () => {
             inGame = true;
@@ -317,8 +336,20 @@
                 clearInterval(timer);
                 btnStart.disabled = false;
                 alert(`你得到${score}分`);
-                score = 0;
-                textScore.innerText = score;
+                // score = 0;
+                // textScore.innerText = score;
+                if (storage == null || score > highscore.score) {
+                    // rihai.play();
+                    const input = prompt("恭喜最高分,請輸入名字");
+                    if (input !== null && input.trim() !== '') {
+                        highscore.score = score;
+                        highscore.name = input;
+                        textHighplayer.innerText = highscore.name;
+                        textHighscore.innerText = highscore.score;
+                        localStorage.setItem("highscore", JSON.stringify(highscore))
+
+                    }
+                }
             }
 
         }
